@@ -12,13 +12,10 @@ import { Observable } from 'rxjs';
   styleUrls: ['./login.component.css']
 })
 export class LoginComponent implements OnInit {
+  signUpMode: false;
   constructor(private authService : AuthService) { }
 
   ngOnInit() {
-  }
-
-  login(form: NgForm){
-    console.log("Logging in", form.value.lemail);
   }
 
   signUp(form: NgForm){

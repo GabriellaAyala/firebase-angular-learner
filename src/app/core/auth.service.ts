@@ -8,22 +8,26 @@ import { AngularFirestore, AngularFirestoreDocument } from 'angularfire2/firesto
 import { Observable, of } from 'rxjs';
 import { switchMap } from 'rxjs/operators';
 
-interface User {
-  uid: string;
-  email: string;
-  photoURL?: string;
-  displayName?: string;
-  favoriteColor?: string;
-}
+
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
-  user: Observable<User>;
+  isAuthenticated;
 
   constructor(private afAuth : AngularFireAuth) {
+    this.afAuth.authState.subscribe(
+      (user) => {
+        if(user) {
+          this.isAuthenticated = true;      
+        } else {
+          this.isAuthenticated = false; 
+        }
+      })
   }
+
+
 
   login(email, password){
     this.afAuth.auth.signInWithEmailAndPassword(email, password);
@@ -34,11 +38,7 @@ export class AuthService {
   }
 
   test(){
-    this.afAuth.authState.subscribe((
-      (state) => {
-        console.log(state);
-      }
-    ))
+    console.log(this.isAuthenticated);
   }
 
   logout(){
