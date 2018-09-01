@@ -1,7 +1,28 @@
-<button (click)="createCollection()">Add Collection</button>
-<button (click)="getCollection()">Get Collection</button>
+<nav class="navbar navbar-default">
+  <div class="container-fluid">
+      <div class="navbar-header">
+          <a [routerLink]="['/']" class="navbar-brand">Test</a>
+      </div>
 
-<router-outlet></router-outlet>
+      <div class="navbar-default">
+          <ul class="nav navbar-nav">
+              <li routerLinkActive="active"><a [routerLink]="['/collection-testing']">Collection Testing</a></li>
+              <li routerLinkActive="active"><a [routerLink]="['/user-profile']">User Profile</a></li>
+          </ul>
+          <ul class="nav navbar-nav navbar-right">
+            <li routerLinkActive="active"><a [routerLink]="['/login']">Login</a></li>
+          </ul>
+      </div>
+  </div>
+</nav>
+
+<div class="container">
+    <div class="row">
+        <div class="col-xs-12">
+            <router-outlet></router-outlet>
+        </div>
+    </div>
+</div>
 
 <!-- <div *ngIf="afAuth.user | async as user; else showLogin">
   <h1>Hello {{ user.displayName }}!</h1>
