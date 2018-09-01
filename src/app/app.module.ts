@@ -6,15 +6,21 @@ import { AngularFireModule } from 'angularfire2';
 import { AngularFirestoreModule } from 'angularfire2/firestore';
 
 import { environment } from '../environments/environment'
+import { CoreModule } from './core/core.module';
+import { AppRoutingModule } from './app-routing.module';
+import { UserProfileComponent } from './user-profile/user-profile.component';
 
 @NgModule({
   declarations: [
-    AppComponent
+    AppComponent,
+    UserProfileComponent
   ],
   imports: [
     BrowserModule,
+    AppRoutingModule,
     AngularFireModule.initializeApp(environment.firebase),
-    AngularFirestoreModule.enablePersistence() // for database
+    AngularFirestoreModule.enablePersistence(),
+    CoreModule // for database
   ],
   providers: [],
   bootstrap: [AppComponent]
