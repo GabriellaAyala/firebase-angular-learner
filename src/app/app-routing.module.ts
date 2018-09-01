@@ -3,11 +3,12 @@ import{ Routes, RouterModule } from '@angular/router'
 import { UserProfileComponent } from './user-profile/user-profile.component';
 import { CollectionTestingComponent } from './collection-testing/collection-testing.component';
 import { LoginComponent } from './login/login.component';
+import { AuthGuardService } from './core/auth-guard.service';
 
 const routes: Routes = [
-  {path: '', redirectTo: '/collection-testing', pathMatch: 'full'},
-  {path: 'collection-testing', component: CollectionTestingComponent},
-  {path: 'user-profile', component: UserProfileComponent},
+  {path: '', redirectTo: '/login', pathMatch: 'full'},
+  {path: 'collection-testing', component: CollectionTestingComponent, canActivate: [AuthGuardService]},
+  {path: 'user-profile', component: UserProfileComponent, canActivate: [AuthGuardService]},
   {path: 'login', component: LoginComponent}
 
 ]
