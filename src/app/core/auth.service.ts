@@ -22,9 +22,26 @@ interface User {
 export class AuthService {
   user: Observable<User>;
 
-  constructor(
+  constructor(private afAuth : AngularFireAuth) {
+  }
 
-  ) { 
+  login(email, password){
+    this.afAuth.auth.signInWithEmailAndPassword(email, password);
+  }
 
+  signUp(email, password){
+    this.afAuth.auth.createUserWithEmailAndPassword(email, password);
+  }
+
+  test(){
+    this.afAuth.authState.subscribe((
+      (state) => {
+        console.log(state);
+      }
+    ))
+  }
+
+  logout(){
+    this.afAuth.auth.signOut()
   }
 }
