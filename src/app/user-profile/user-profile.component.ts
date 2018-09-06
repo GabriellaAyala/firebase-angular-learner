@@ -7,10 +7,18 @@ import { AuthService } from '../core/auth.service';
   styleUrls: ['./user-profile.component.css']
 })
 export class UserProfileComponent implements OnInit {
+  user;
 
-  constructor(private auth: AuthService) { }
+  constructor(private auth: AuthService) {
+    this.auth.user.subscribe(
+      (data) => {
+        this.user = data;
+      }
+    )
+   }
 
   ngOnInit() {
+    console.log(this.user);
   }
 
 }

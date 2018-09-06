@@ -9,16 +9,32 @@
         <label for="lpassword">Password</label>
         <input type="password" id="lpassword" class="form-control" name="lpassword" ngModel>
       </div>
-      <button type="submit" class="btn btn-default btn-block"(click)="onLogin(f)">Login</button>
+      <button type="submit" class="btn btn-default btn-block">Login</button>
       <button type="button" class="btn btn-primary btn-block" (click)="signUpMode = true">
-        Don't have an account? Signup here</button>
+        Don't have an account? Sign up here</button>
     </form>
   </div>
 </div>
 
-<div class="row">
+<div class="row" *ngIf="signUpMode">
   <div class="col-xs-6 col-xs-offset-3">
-    
+      <form (ngSubmit)="onSignUp(s)" #s="ngForm">
+          <div class="form-group">
+              <label for="displayName">Display Name</label>
+              <input type="text" id="displayName" class="form-control" name="displayName" ngModel>
+            </div>
+          <div class="form-group">
+            <label for="semail">Email</label>
+            <input type="text" id="semail" class="form-control" name="semail" ngModel>
+          </div>
+          <div class="form-group">
+            <label for="spassword">Password</label>
+            <input type="password" id="spassword" class="form-control" name="spassword" ngModel>
+          </div>
+          <button type="submit" class="btn btn-primary btn-block">Sign Up</button>
+        </form>
   </div>
 </div>
+
+<button (click)="test()">Test</button>
 <button (click)="logout()">Logout</button>

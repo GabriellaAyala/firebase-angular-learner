@@ -25,7 +25,7 @@ import { CollectionTestingComponent } from './collection-testing/collection-test
     AppRoutingModule,
     FormsModule,
     AngularFireModule.initializeApp(environment.firebase),
-    AngularFirestoreModule.enablePersistence(),
+    AngularFirestoreModule,
     CoreModule // for database
   ],
   providers: [],
