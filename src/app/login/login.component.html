@@ -1,0 +1,24 @@
+<div class="row" *ngIf="!signUpMode">
+  <div class="col-xs-6 col-xs-offset-3">
+    <form (ngSubmit)="onLogin(f)" #f="ngForm">
+      <div class="form-group">
+        <label for="lemail">Email</label>
+        <input type="text" id="lemail" class="form-control" name="lemail" ngModel>
+      </div>
+      <div class="form-group">
+        <label for="lpassword">Password</label>
+        <input type="password" id="lpassword" class="form-control" name="lpassword" ngModel>
+      </div>
+      <button type="submit" class="btn btn-default btn-block"(click)="onLogin(f)">Login</button>
+      <button type="button" class="btn btn-primary btn-block" (click)="signUpMode = true">
+        Don't have an account? Signup here</button>
+    </form>
+  </div>
+</div>
+
+<div class="row">
+  <div class="col-xs-6 col-xs-offset-3">
+    
+  </div>
+</div>
+<button (click)="logout()">Logout</button>
