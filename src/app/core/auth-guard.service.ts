@@ -14,17 +14,6 @@ export class AuthGuardService {
   canActivate() {
     if(this.authService.isAuthenticated) {
       console.log("Is authenticated");
-      //   return this.authService.user.pipe(
-      //   take(1),
-      //   map(user => user && user.roles.admin ? true : false),
-      //   tap(isAdmin => {
-      //     if(!isAdmin){
-      //       console.log("not an admin");
-      //     } else {
-      //       console.log("an admin");
-      //     }
-      //   })
-      // )
       return true;
     } else {
       console.log("Is not authenticated")

@@ -42,7 +42,7 @@ export class CollectionTestingComponent implements OnInit {
       }
 
   getCollection(){
-    // var docRef = this.db.collection("cities").doc("SF").ref;
+    // var docRef = this.db.collection("cities").doc("SF").ref; for future reference
     // docRef.get().then(
     //   (doc) => {
     //     console.log(doc.data());

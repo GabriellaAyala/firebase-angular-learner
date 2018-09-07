@@ -1,7 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Router } from '@angular/router';
 
-import { auth } from 'firebase/app';
 import { AngularFireAuth } from 'angularfire2/auth';
 import { AngularFirestore, AngularFirestoreDocument } from 'angularfire2/firestore';
 
@@ -19,8 +17,7 @@ export class AuthService {
   user: Observable<User>;
 
   constructor(private afAuth : AngularFireAuth,
-              private db : AngularFirestore,
-              private router: Router) {
+              private db : AngularFirestore) {
 
     this.user = this.afAuth.authState.pipe(switchMap(
       user => {
@@ -90,31 +87,28 @@ export class AuthService {
     this.afAuth.auth.signOut()
   }
 
-  // canRead(user: User): boolean {
-  //   const allowed = ['admin', 'editor', 'subscriber'];
-  //   return this.checkAuthorization(user, allowed);
-  // }
+  canRead(user: User): boolean {
+    const allowed = ['subscriber'];
+    return this.checkAuthorization(user, allowed);
+  }
 
-  // canEdit(user: User):boolean{
-  //   const allowed = ['admin', 'editor'];
-  //   return this.checkAuthorization(user, allowed);
-  // }
+  canEdit(user: User):boolean{
+    const allowed = ['editor'];
+    return this.checkAuthorization(user, allowed);
+  }
 
-  // canDelete(user: User):boolean{
-  //   const allowed = ['admin'];
-  //   return this.checkAuthorization(user, allowed);
-  // }
+  canDelete(user: User):boolean{
+    const allowed = ['admin'];
+    return this.checkAuthorization(user, allowed);
+  }
 
   checkAuthorization(user: User, allowedRoles: string[]): boolean{
     if(!user) return false;
-    for(const role of allowedRoles) {
-      console.log("CHECK: ", user.roles, role);
+    for(const role of allowedRoles){
+      if(user.roles[role]){
+        return true;
+      }
     }
-  //   for(const role of allowedRoles) {
-  //     if(user.roles[role]){
-  //       return true;
-  //     }
-  //   }
-  //   return false; 
+    return false; 
   }
 }
