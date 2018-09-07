@@ -1,5 +1,3 @@
-import { auth } from "firebase";
-
 //if wanted to assign multiple roles
 export interface Roles {
     subscriber?: boolean;
