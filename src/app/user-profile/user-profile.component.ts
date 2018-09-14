@@ -9,12 +9,13 @@ import { Subscription } from 'rxjs';
   styleUrls: ['./user-profile.component.css']
 })
 export class UserProfileComponent implements OnInit, OnDestroy {
-  user: User = {
-    uid: '',
-    email: '',
-    displayName: 'Loading. . .',
-    roles : {}
-  };
+  user: User;
+  //  = {     //Initializing the user at the beginning works, seems there'd be a better way
+  //   uid: '',
+  //   email: '',
+  //   displayName: 'Loading. . .',
+  //   roles : {}
+  // };
 
   subscription: Subscription;
 
@@ -22,13 +23,11 @@ export class UserProfileComponent implements OnInit, OnDestroy {
     this.subscription = this.auth.user.subscribe(
       (data) => {
         this.user = data;
-        console.log("USER SET", this.user);
       }
     )
    }
 
   ngOnInit() {
-    console.log("USER", this.user);
   }
 
   ngOnDestroy(){

@@ -1,4 +1,4 @@
-<p>Hello {{ user.displayName }}</p>
+<p *ngIf="user">Hello {{ user.displayName }}</p>
 
 <p *ngIf="auth.canRead(user)">You are a subscriber</p>
 <p *ngIf="auth.canEdit(user)">You are an editor</p>

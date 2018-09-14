@@ -6,6 +6,7 @@ import { AngularFirestore, AngularFirestoreDocument } from 'angularfire2/firesto
 import { Observable, of } from 'rxjs';
 import { switchMap } from 'rxjs/operators';
 import { User } from './user';
+import { Router } from '@angular/router';
 
 
 
@@ -17,14 +18,16 @@ export class AuthService {
   user: Observable<User>;
 
   constructor(private afAuth : AngularFireAuth,
-              private db : AngularFirestore) {
+              private db : AngularFirestore,
+              private router: Router) {
 
     this.user = this.afAuth.authState.pipe(switchMap(
       user => {
         if (user) {
           this.isAuthenticated = true;
-          return this.db.doc<User>('users/${user.uid}').valueChanges();
+          return this.db.doc<User>('users/' + user.uid).valueChanges();
         } else {
+          this.isAuthenticated = false; 
           return of(null);
         }
       }
@@ -45,46 +48,52 @@ export class AuthService {
         })
       }
     ).then(
-      () => {
-        console.log("All signed up")
+      (success) => {
+        console.log("All signed up", success)
       }
     )
     .catch(
-      () => {
-        "Something happened. . ."
+      (error) => {
+        console.log("Something happened. . .", error);
       }
     );
   }
 
   updateUser(user) {
-    const userRef: AngularFirestoreDocument<any> = this.db.doc('users/${user.uid}');
+    const userRef: AngularFirestoreDocument<any> = this.db.doc('users/' + user.uid);
     const data: User ={
       uid: user.uid,
       email: user.email,
       displayName: user.displayName,
-      roles : {
-        subscriber : true
+      roles : {                        //create a way for dynamic roles, request access from admin?
+        subscriber : true,
+        editor: true,
+        admin: false //must be admin for access to data in collection testing
       }
     }
-    return userRef.set(data, {merge : true});
+    return userRef.set(data, {merge : false});
   }
   
   login(email, password){
     this.afAuth.auth.signInWithEmailAndPassword(email, password).then(
       credential => {
-        console.log("Signed in. . .", credential);
         this.updateUser(credential.user);
+      }
+    ).then(
+      () => {
+        this.router.navigate(['/user-profile']);
       }
     ).catch(
       () => {
-        console.log("Something happened. . ")
+        console.log("Something happened. . ");
       }
     );
   }
 
 
   logout(){
-    this.afAuth.auth.signOut()
+    this.router.navigate(['/login']);
+    this.afAuth.auth.signOut();
   }
 
   canRead(user: User): boolean {

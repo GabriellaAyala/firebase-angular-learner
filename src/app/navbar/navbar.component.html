@@ -1,0 +1,19 @@
+<nav class="navbar navbar-default">
+  <div class="container-fluid">
+      <div class="navbar-header">
+          <a [routerLink]="['/']" class="navbar-brand">Test</a>
+      </div>
+
+      <div class="navbar-default">
+          <ul class="nav navbar-nav">
+              <li routerLinkActive="active"><a [routerLink]="['/collection-testing']">Collection Testing</a></li>
+              <li routerLinkActive="active"><a [routerLink]="['/user-profile']">User Profile</a></li>
+          </ul>
+          <ul class="nav navbar-nav navbar-right">
+            <li *ngIf="!auth.isAuthenticated" routerLinkActive="active"><a [routerLink]="['/login']">Login</a></li>
+            <li *ngIf="auth.isAuthenticated"><a (click)="logout()"
+                                                style="cursor: pointer">Logout</a></li>
+          </ul>
+      </div>
+  </div>
+</nav>
