@@ -22,12 +22,15 @@ export class AuthService {
               private router: Router) {
 
     this.user = this.afAuth.authState.pipe(switchMap(
-      user => {
+    (user) => {
+        console.log("AUTH STATE CHANGED");
         if (user) {
           this.isAuthenticated = true;
+          console.log("USER LOGGED IN");
           return this.db.doc<User>('users/' + user.uid).valueChanges();
         } else {
-          this.isAuthenticated = false; 
+          this.isAuthenticated = false;
+          console.log("NO USER LOGGED IN")
           return of(null);
         }
       }
@@ -93,7 +96,15 @@ export class AuthService {
 
   logout(){
     this.router.navigate(['/login']);
-    this.afAuth.auth.signOut();
+    this.afAuth.auth.signOut().then(
+      () => {
+        console.log("LOGGED OUT SUCCESSFULLY", this.isAuthenticated);
+      }
+    ).catch(
+      () => {
+        console.log("UH OH");
+      }
+    );
   }
 
   canRead(user: User): boolean {

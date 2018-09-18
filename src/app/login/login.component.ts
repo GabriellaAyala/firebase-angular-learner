@@ -11,13 +11,8 @@ import { AuthService } from '../core/auth.service';
 })
 export class LoginComponent implements OnInit {
   signUpMode: false;
-  tester;
+  private tester;
   constructor(private authService : AuthService) { 
-    this.tester = this.authService.user.subscribe(
-      (data) => {
-        return data;
-      }
-    )
   }
 
   ngOnInit() {

@@ -12,11 +12,11 @@ export class AuthGuardService {
   constructor(private authService: AuthService, private router: Router) { }
 
   canActivate() {
-    if(this.authService.isAuthenticated) {
-      console.log("Is authenticated");
+    if(this.authService.user) {
+      console.log(this.authService.user, "Is authenticated");
       return true;
     } else {
-      console.log("Is not authenticated")
+      console.log(this.authService.user,"Is not authenticated")
       this.router.navigate(["/"]);
     }
   }
