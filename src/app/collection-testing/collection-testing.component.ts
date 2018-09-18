@@ -8,10 +8,9 @@ import { Observable } from 'rxjs';
   styleUrls: ['./collection-testing.component.css']
 })
 export class CollectionTestingComponent implements OnInit {
+  errorMessage: boolean;
 
-  message: Observable<any[]>;
   constructor(public db: AngularFirestore) {
-    this.message = db.collection('cities').valueChanges();
   }
 
   ngOnInit() {}
@@ -64,7 +63,11 @@ export class CollectionTestingComponent implements OnInit {
 
     queryRef.forEach((doc) => {
       console.log(doc);
-    })
+    }).catch(
+      () => {
+      this.errorMessage = true;
+      }
+    )
 
   }
 
