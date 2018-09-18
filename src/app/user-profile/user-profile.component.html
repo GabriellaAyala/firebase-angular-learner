@@ -1,26 +1,5 @@
-<!-- <div *ngIf="auth.user | async; then authenticated else guest">
-</div>
+<p *ngIf="user">Hello {{ user.displayName }}</p>
 
-
-<ng-template #guest>
-<h3>Howdy, GUEST</h3>
-<p>Login to get started...</p>
-
-<button (click)="auth.emailLogin()">
-  <i class="fa fa-email"></i> Connect
-</button>
-
-</ng-template>
-
-
-<ng-template #authenticated>
-<div *ngIf="auth.user | async as user">
-  <h3>Howdy, {{ user.displayName }}</h3>
-  <img  [src]="user.photoURL">
-  <p>UID: {{ user.uid }}</p>
-  <p>Favorite Color: {{ user?.favoriteColor }} </p>
-  <button (click)="auth.signOut()">Logout</button>
-</div>
-</ng-template> -->
-
-<p>Hello</p>
+<p *ngIf="auth.canRead(user)">You are a subscriber</p>
+<p *ngIf="auth.canEdit(user)">You are an editor</p>
+<p *ngIf="auth.canDelete(user)">You are an admin</p>

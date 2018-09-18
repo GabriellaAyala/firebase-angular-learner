@@ -8,10 +8,9 @@ import { Observable } from 'rxjs';
   styleUrls: ['./collection-testing.component.css']
 })
 export class CollectionTestingComponent implements OnInit {
+  errorMessage: boolean;
 
-  message: Observable<any[]>;
   constructor(public db: AngularFirestore) {
-    this.message = db.collection('cities').valueChanges();
   }
 
   ngOnInit() {}
@@ -42,7 +41,7 @@ export class CollectionTestingComponent implements OnInit {
       }
 
   getCollection(){
-    // var docRef = this.db.collection("cities").doc("SF").ref;
+    // var docRef = this.db.collection("cities").doc("SF").ref; for future reference
     // docRef.get().then(
     //   (doc) => {
     //     console.log(doc.data());
@@ -64,7 +63,11 @@ export class CollectionTestingComponent implements OnInit {
 
     queryRef.forEach((doc) => {
       console.log(doc);
-    })
+    }).catch(
+      () => {
+      this.errorMessage = true;
+      }
+    )
 
   }
 

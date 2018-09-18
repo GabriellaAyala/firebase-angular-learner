@@ -1,12 +1,12 @@
 import { Injectable } from '@angular/core';
-import { Router } from '@angular/router';
 
-import { auth } from 'firebase/app';
 import { AngularFireAuth } from 'angularfire2/auth';
 import { AngularFirestore, AngularFirestoreDocument } from 'angularfire2/firestore';
 
 import { Observable, of } from 'rxjs';
 import { switchMap } from 'rxjs/operators';
+import { User } from './user';
+import { Router } from '@angular/router';
 
 
 
@@ -15,33 +15,120 @@ import { switchMap } from 'rxjs/operators';
 })
 export class AuthService {
   isAuthenticated;
+  user: Observable<User>;
 
-  constructor(private afAuth : AngularFireAuth) {
-    this.afAuth.authState.subscribe(
-      (user) => {
-        if(user) {
-          this.isAuthenticated = true;      
+  constructor(private afAuth : AngularFireAuth,
+              private db : AngularFirestore,
+              private router: Router) {
+
+    this.user = this.afAuth.authState.pipe(switchMap(
+    (user) => {
+        console.log("AUTH STATE CHANGED");
+        if (user) {
+          this.isAuthenticated = true;
+          console.log("USER LOGGED IN");
+          return this.db.doc<User>('users/' + user.uid).valueChanges();
         } else {
-          this.isAuthenticated = false; 
+          this.isAuthenticated = false;
+          console.log("NO USER LOGGED IN")
+          return of(null);
         }
-      })
+      }
+    ))
   }
 
 
 
+  
+  signUp(email, password, displayName){
+    console.log("signing up")
+    this.afAuth.auth.createUserWithEmailAndPassword(email, password)
+    .then(
+      (data) => {
+        data.user.updateProfile({
+          displayName: displayName,
+          photoURL: ''
+        })
+      }
+    ).then(
+      (success) => {
+        console.log("All signed up", success)
+      }
+    )
+    .catch(
+      (error) => {
+        console.log("Something happened. . .", error);
+      }
+    );
+  }
+
+  updateUser(user) {
+    const userRef: AngularFirestoreDocument<any> = this.db.doc('users/' + user.uid);
+    const data: User ={
+      uid: user.uid,
+      email: user.email,
+      displayName: user.displayName,
+      roles : {                        //create a way for dynamic roles, request access from admin?
+        subscriber : true,
+        editor: true,
+        admin: false //must be admin for access to data in collection testing
+      }
+    }
+    return userRef.set(data, {merge : false});
+  }
+  
   login(email, password){
-    this.afAuth.auth.signInWithEmailAndPassword(email, password);
+    this.afAuth.auth.signInWithEmailAndPassword(email, password).then(
+      credential => {
+        this.updateUser(credential.user);
+      }
+    ).then(
+      () => {
+        this.router.navigate(['/user-profile']);
+      }
+    ).catch(
+      () => {
+        console.log("Something happened. . ");
+      }
+    );
   }
 
-  signUp(email, password){
-    this.afAuth.auth.createUserWithEmailAndPassword(email, password);
-  }
-
-  test(){
-    console.log(this.isAuthenticated);
-  }
 
   logout(){
-    this.afAuth.auth.signOut()
+    this.router.navigate(['/login']);
+    this.afAuth.auth.signOut().then(
+      () => {
+        console.log("LOGGED OUT SUCCESSFULLY", this.isAuthenticated);
+      }
+    ).catch(
+      () => {
+        console.log("UH OH");
+      }
+    );
+  }
+
+  canRead(user: User): boolean {
+    const allowed = ['subscriber'];
+    return this.checkAuthorization(user, allowed);
+  }
+
+  canEdit(user: User):boolean{
+    const allowed = ['editor'];
+    return this.checkAuthorization(user, allowed);
+  }
+
+  canDelete(user: User):boolean{
+    const allowed = ['admin'];
+    return this.checkAuthorization(user, allowed);
+  }
+
+  checkAuthorization(user: User, allowedRoles: string[]): boolean{
+    if(!user) return false;
+    for(const role of allowedRoles){
+      if(user.roles[role]){
+        return true;
+      }
+    }
+    return false; 
   }
 }

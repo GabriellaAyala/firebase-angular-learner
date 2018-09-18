@@ -1,2 +1,4 @@
 <button (click)="createCollection()">Add Collection</button>
 <button (click)="getCollection()">Get Collection</button>
+
+<p *ngIf="errorMessage">You don't have access to this collection</p>
